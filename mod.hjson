@@ -1,0 +1,10 @@
+name: "astra"
+version: 0.0.0
+minGameVersion: 151.1
+main: "astra.AstraMod"
+
+displayName: "Astra"
+author: "Vladislav117"
+description: "An aesthetic Mindustry mod"
+
+java: true

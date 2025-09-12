@@ -1,0 +1,115 @@
+import astradevelopment.AstraDevelopmentPlugin
+
+plugins {
+    id "java"
+    id "idea"
+}
+
+apply plugin: AstraDevelopmentPlugin
+
+// Configuration
+
+ext {
+    modName = project.getProperties().get("modName")
+    modGameVersion = project.getProperties().get("modGameVersion")
+    androidSdkLocation = project.getProperties().get("androidSdkLocation")
+    d8Location = project.getProperties().get("d8Location")
+    modJar = "${modName}.jar"
+    desktopModJar = "${modName}-desktop.jar"
+    androidModJar = "${modName}-android.jar"
+    modsDirectory = project.getProperties().getOrDefault("modsDirectory", "MODS_DIRECTORY_IS_NOT_SPECIFIED")
+}
+
+// Dependencies
+
+repositories {
+    mavenCentral()
+    maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+    maven { url "https://www.jitpack.io" }
+}
+
+dependencies {
+    compileOnly "com.github.Anuken.Arc:arc-core:v$modGameVersion"
+    compileOnly "com.github.Anuken.Mindustry:core:v$modGameVersion"
+    compileOnly "org.jetbrains:annotations:26.0.2"
+    annotationProcessor "com.github.Anuken:jabel:93fde537c7"
+}
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "com.github.Anuken.Arc") {
+            details.useVersion "v$modGameVersion"
+        }
+    }
+}
+
+// Build
+
+sourceSets.main.java.srcDirs = ["src"]
+
+java {
+    targetCompatibility = 8
+}
+
+jar {
+    outputs.upToDateWhen { false }
+
+    dependsOn buildAssets
+
+    archiveFileName = desktopModJar
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from(projectDir) {
+        include "mod.hjson"
+    }
+
+    from("build/assets/") {
+        include "**"
+    }
+}
+
+tasks.register("jarAndroid") {
+    outputs.upToDateWhen { false }
+
+    dependsOn jar
+
+    doLast {
+        if (!new File(androidSdkLocation).exists()) throw new GradleException("No Android SDK found. Ensure that \"androidSdkLocation\" is set in local.properties")
+        if (!new File(d8Location).exists()) throw new GradleException("No d8 found. Ensure that \"d8Location\" is set in local.properties")
+        def platformRoot = new File("$androidSdkLocation/platforms/").listFiles().sort().reverse().find { f -> new File(f, "android.jar").exists() }
+        if (!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
+        def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")]).collect { "--classpath $it.path" }.join(" ")
+        "$d8Location $dependencies --min-api 14 --output $androidModJar $desktopModJar".execute(null, new File("build/libs")).waitForProcessOutput(System.out, System.err)
+    }
+}
+
+tasks.register("fullJar", Jar) {
+    outputs.upToDateWhen { false }
+
+    dependsOn buildAssets
+    dependsOn jar
+    dependsOn jarAndroid
+
+    archiveFileName = modJar
+
+    from { [zipTree("build/libs/$desktopModJar"), zipTree("build/libs/$androidModJar")] }
+
+    doLast {
+        delete {
+            delete "build/libs/$desktopModJar"
+            delete "build/libs/$androidModJar"
+        }
+    }
+}
+
+// IDE
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

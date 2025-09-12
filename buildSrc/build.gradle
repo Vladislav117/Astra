@@ -1,0 +1,46 @@
+plugins {
+    id "groovy"
+    id "java"
+    id "idea"
+}
+
+// Configuration
+
+ext {
+    arcVersion = "151.1" // TODO 12.09.2025: Read arc version from mod.hjson
+}
+
+// Dependencies
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compileOnly gradleApi()
+    compileOnly localGroovy()
+    compileOnly "org.jetbrains:annotations:26.0.2"
+    implementation "com.github.Anuken.Arc:arc-core:v$arcVersion"
+}
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "com.github.Anuken.Arc") {
+            details.useVersion "v$arcVersion"
+        }
+    }
+}
+
+// Build
+
+sourceSets.main.java.srcDirs = ["src"]
+
+// IDE
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
