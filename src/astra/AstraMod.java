@@ -1,5 +1,6 @@
 package astra;
 
+import astra.block.AstraBlocks;
 import mindustry.mod.Mod;
 
 public class AstraMod extends Mod {
@@ -8,5 +9,6 @@ public class AstraMod extends Mod {
 
     @Override
     public void loadContent() {
+        AstraBlocks.init();
     }
 }
