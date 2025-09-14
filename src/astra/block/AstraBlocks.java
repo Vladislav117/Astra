@@ -5,9 +5,10 @@ import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.environment.Floor;
 
 public final class AstraBlocks {
-    public static Block
+    public static Block yellowPavement, whitePavement, pavement, blackPavement,
 
     copperWallHuge, copperWallGigantic, titaniumWallHuge, titaniumWallGigantic,
 
@@ -169,5 +170,10 @@ public final class AstraBlocks {
         }};
 
         // TODO 13.09.2025: Add walls to research tree
+
+        yellowPavement = new Floor("pavement-yellow", 0);
+        whitePavement = new Floor("pavement-white", 0);
+        pavement = new Floor("pavement", 0);
+        blackPavement = new Floor("pavement-black", 0);
     }
 }
