@@ -31,7 +31,7 @@ public final class AstraBlocks {
         blackPavement = new Floor("pavement-black", 0);
 
         laserReflectionWall = new LaserReflectionWall("laser-reflection-wall") {{
-            requirements(Category.defense, ItemStack.with(Items.metaglass, 10, Items.lead, 5));
+            requirements(Category.defense, ItemStack.with(Items.surgeAlloy, 6 * 2, Items.metaglass, 12));
             health = Blocks.plastaniumWall.health;
         }};
 
