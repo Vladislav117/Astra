@@ -1,0 +1,20 @@
+type: tank
+shadowElevation: 0.2
+template: TankUnitType
+hitSize: 12
+health: 117
+faceTarget: false
+speed: 2
+accel: 0.5
+drag: 0.1
+drownTimeMultiplier: 1
+treadFrames: 18
+treadRects: [
+  {
+    x: -20
+    y: -25
+    width: 24
+    height: 48
+  }
+]
+rotateSpeed: 3.5
