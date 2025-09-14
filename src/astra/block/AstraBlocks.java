@@ -21,6 +21,11 @@ public final class AstraBlocks {
     carbideWallHuge, carbideWallGigantic, reinforcedSurgeWallHuge, reinforcedSurgeWallGigantic;
 
     public static void init() {
+        yellowPavement = new Floor("pavement-yellow", 0);
+        whitePavement = new Floor("pavement-white", 0);
+        pavement = new Floor("pavement", 0);
+        blackPavement = new Floor("pavement-black", 0);
+
         copperWallHuge = new Wall("copper-wall-huge") {{
             size = 3;
             requirements(Category.defense, ItemStack.mult(Blocks.copperWall.requirements, size * size));
@@ -170,10 +175,5 @@ public final class AstraBlocks {
         }};
 
         // TODO 13.09.2025: Add walls to research tree
-
-        yellowPavement = new Floor("pavement-yellow", 0);
-        whitePavement = new Floor("pavement-white", 0);
-        pavement = new Floor("pavement", 0);
-        blackPavement = new Floor("pavement-black", 0);
     }
 }
