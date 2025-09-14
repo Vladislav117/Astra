@@ -24,6 +24,7 @@ public class LaserReflectionWall extends Wall {
     public class LaserReflectionWallBuild extends WallBuild {
         @Override
         public void damage(Bullet bullet, Team source, float damage) {
+            // TODO: 14.09.2025: It doesn't work as I want
             if (bullet.type instanceof LaserBulletType && bullet.team != team) {
                 super.damage(bullet, source, damage * laserDamageMultiplier);
             }
