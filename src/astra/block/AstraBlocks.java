@@ -1,6 +1,8 @@
 package astra.block;
 
+import astra.blocks.LaserReflectionWall;
 import mindustry.content.Blocks;
+import mindustry.content.Items;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
@@ -9,6 +11,8 @@ import mindustry.world.blocks.environment.Floor;
 
 public final class AstraBlocks {
     public static Block yellowPavement, whitePavement, pavement, blackPavement,
+
+    laserReflectionWall,
 
     copperWallHuge, copperWallGigantic, titaniumWallHuge, titaniumWallGigantic,
 
@@ -25,6 +29,11 @@ public final class AstraBlocks {
         whitePavement = new Floor("pavement-white", 0);
         pavement = new Floor("pavement", 0);
         blackPavement = new Floor("pavement-black", 0);
+
+        laserReflectionWall = new LaserReflectionWall("laser-reflection-wall") {{
+            requirements(Category.defense, ItemStack.with(Items.metaglass, 10, Items.lead, 5));
+            health = Blocks.plastaniumWall.health;
+        }};
 
         copperWallHuge = new Wall("copper-wall-huge") {{
             size = 3;
